@@ -109,6 +109,9 @@ From now, we recommend using drural user.
         Again you can replace your domain with sed:
             sed -i 's/drural-sandbox.eu/yourdomain.eu/g' dev.env
 
+        Traefik will generate certificates with Let's Encrypt. Put your email address for notifications:
+            - --certificatesresolvers.le.acme.email=your@email.com
+
 7.- Initialization tasks
 	
 	Login as drural user for this tasks
@@ -162,3 +165,6 @@ From now, we recommend using drural user.
 	- Compilable docker images for dashboard and storefront for less CPU and RAM usage
 	
 
+Any question please contact drural@idieikon.com
+
+Thanks
