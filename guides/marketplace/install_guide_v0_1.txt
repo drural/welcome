@@ -133,7 +133,8 @@ From now, we recommend using drural user.
 	
 		docker compose run --rm api bash -c "source venv/bin/activate && python3 manage.py populatedb --createsuperuser"
 
-	Once all tasks are completed check with login in: https://yourdomain.com
+	Once all tasks are completed check with login in: https://yourdomain.com/dashboard
+        First access could take some time.
 		User: admin@example.com
 		Password: admin
 
