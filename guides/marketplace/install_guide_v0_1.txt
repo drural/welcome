@@ -67,12 +67,15 @@ From now, we recommend using drural user.
 		For webhook use this address: https://yourdomain/plugins/channel/default-channel/saleor.payments.stripe/webhooks/
 
 	Generate a MAPBOX token: https://docs.mapbox.com/help/getting-started/access-tokens/
+        Create a MAPBOX style too, name it "drural". Use MAPBOX Studio: https://studio.mapbox.com/
 
 	Prepare Email address and SMTP account for sending emails
 		
 		In our example we will use marketplace@drural-sandbox.eu. Any message between marketplace and users will be sent from this address. 
 		We will need an STMP configuration in concordance with this address to send emails.
 
+
+From now we will work in /opt/drural/infrastructure folder
 	
 5.- Setting data in dev.env config file
 
@@ -86,7 +89,7 @@ From now, we recommend using drural user.
 		# Token for Mapbox
 		MAPBOX_TOKEN=abcd123
 
-		# email sending settings
+		# email sending settings, user and password should be url encoded if needed
 		MK_DEFAULT_FROM_EMAIL=marketplace@drural-sandbox.eu
 		MK_EMAIL_URL=smtp://user:password@mysmtpserver.com:port/?tls=True
 
@@ -116,25 +119,28 @@ From now, we recommend using drural user.
 	
 	Login as drural user for this tasks
 
-	Compile docker api backend image
+	Compile containers and code. HIGHLY RECOMMENDED AFTER CHANGES IN dev.env!!!!
 
-		cd /opt/drural/infrastructure
-		docker compose build
-	
-		A new docker image should be create. Look for image "drural-markectplace-back" with "docker image ls"
+            cd /opt/drural/infrastructure
+            ./build.sh
+        
+            Don't worry if you get some  Javascript heap out of memory errors, are from type definitions check, not for the final build.
+            Build will take some time.
+             
+                
 
 	Initialize platform
 
-		./drural start
+            ./drural up -d
 
-		On first run marketplace needs to create data structures. Check it with "./drural logs -f | grep "apisetup" until you see "apisetup.drural exited with code 0". You can exit log with Control + C
+            On first run marketplace needs to create data structures. Check it with "./drural logs -f | grep "apisetup" until you see "apisetup.drural exited with code 0". You can exit log with Control + C
 
-	Create some sample data
+	Once initialized we need to create some sample data and users
 	
-		docker compose run --rm api bash -c "source venv/bin/activate && python3 manage.py populatedb --createsuperuser"
+            ./createsampledata.sh
 
-	Once all tasks are completed check with login in: https://yourdomain.com/dashboard
-        First access could take some time.
+	Once all tasks are completed check with login in: https://yourdomain.com/dashboard/
+        First access could take some minutes, node needs to webpack application.
 		User: admin@example.com
 		Password: admin
 
@@ -143,8 +149,14 @@ From now, we recommend using drural user.
 
 	From /opt/drural/infrastructure folder run
 
+        If you changed any environment variables
+	Starting:	./drural.sh up -d
+	Stopping:	./drural.sh down
+
+        If there is no changes could be faster
 	Starting:	./drural.sh start
 	Stopping:	./drural.sh stop
+
 
 	For logs:	./drural-sh logs -f | grep "component name"
 	You can get component names if you run a "docker stats" when running.
@@ -164,6 +176,7 @@ From now, we recommend using drural user.
 
 12.- Things that will be improved
 	- Compilable docker images for dashboard and storefront for less CPU and RAM usage
+        - Chatwoot integration
 	
 
 Any question please contact drural@idieikon.com
